@@ -1,0 +1,8 @@
+INFO:     Started server process [634]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:39966 - "GET /openai/thread HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41424 - "GET /openai/thread HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41424 - "GET /openai/assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41426 - "GET /openai/assistant HTTP/1.1" 200 OK
