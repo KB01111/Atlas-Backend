@@ -17,6 +17,14 @@ class AgentBase(BaseModel):
     config_path: Optional[str] = None
     status: Optional[str] = None
 
+    # Extensibility fields
+    agent_type: Optional[str] = None
+    graph_id: Optional[str] = None
+    memory_config: Optional[dict] = None  # Example: Configuration for memory management
+    a2a_config: Optional[dict] = None  # Example: Configuration for agent-to-agent communication
+    plugin_config_id: Optional[str] = None
+    output_schema: Optional[dict] = None  # Example: Schema for the agent's output
+
 class AgentCreate(AgentBase):
     pass
 

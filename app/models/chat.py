@@ -12,6 +12,12 @@ class ChatSessionBase(BaseModel):
     participants: Optional[List[SessionParticipant]] = []
     archived: Optional[bool] = False
 
+    # Extensibility fields
+    graph_id: Optional[str] = None
+    memory_config: Optional[dict] = None  # Example: Configuration for memory management
+    plugin_config_id: Optional[str] = None
+    a2a_config: Optional[dict] = None  # Example: Configuration for agent-to-agent communication
+
 class ChatSessionCreate(ChatSessionBase):
     pass
 
