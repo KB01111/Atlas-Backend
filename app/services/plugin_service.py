@@ -24,9 +24,7 @@ class PluginService:
     @staticmethod
     async def get_plugin_config(config_id: str, user_id: str) -> Optional[dict]:
         res = supabase.table(PLUGIN_TABLE).select("*").eq("id", config_id).eq("user_id", user_id).single().execute()
-        if res.data:
-            return res.data
-        return None
+        return res.data if res.data else None
 
     @staticmethod
     async def update_plugin_config(config_id: str, user_id: str, config: PluginConfigurationUpdate) -> Optional[dict]:
