@@ -40,7 +40,7 @@ class PluginService:
         return bool(res.data)
 
     @staticmethod
-    async def list_plugin_configs(user_id: str) -> List[dict]:
+    async def list_plugin_configs(user_id: str) -> list[dict]:
         res = supabase.table(PLUGIN_TABLE).select("*").eq("user_id", user_id).execute()
         return res.data or []
 
