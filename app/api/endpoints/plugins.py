@@ -6,9 +6,11 @@ from app.models.plugin import (
 )
 from app.services.plugin_service import PluginService
 from typing import List
-def get_current_user_id(token: str = Depends(oauth2_scheme)):
-    # Replace with actual authentication logic
-    # Example: Verify token and return user ID
+from fastapi.security import OAuth2PasswordBearer
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="...")  # or define as needed
+
+def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:
+    # Replace with or import verify_token
     user = verify_token(token)
     return user.id if user else None
 
