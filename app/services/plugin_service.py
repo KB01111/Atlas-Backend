@@ -19,7 +19,8 @@ class PluginService:
         res = supabase.table(PLUGIN_TABLE).insert(data).execute()
         if res.data:
             return res.data[0]
-        raise PluginServiceError(res.error)
+        # Either define or import PluginServiceError before raising it.
+        raise Exception(res.error)  # or define a custom exception class
 
     @staticmethod
     async def get_plugin_config(config_id: str, user_id: str) -> Optional[dict]:
