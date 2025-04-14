@@ -32,9 +32,7 @@ class PluginService:
         data = config.dict()
         data["encrypted_config_blob"] = encrypted_blob
         res = supabase.table(PLUGIN_TABLE).update(data).eq("id", config_id).eq("user_id", user_id).execute()
-        if res.data:
-            return res.data[0]
-        return None
+        return res.data[0] if res.data else None
 
     @staticmethod
     async def delete_plugin_config(config_id: str, user_id: str) -> bool:
