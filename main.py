@@ -10,6 +10,22 @@ from app.api.endpoints.agents import router as agents_router
 app = FastAPI()
 from app.api.endpoints.chat import router as chat_router
 
+# Exception Handlers
+from fastapi.exceptions import RequestValidationError
+from fastapi import HTTPException
+import sqlalchemy.exc
+from app.core.error_handlers import (
+    http_exception_handler,
+    validation_exception_handler,
+    db_exception_handler,
+    generic_exception_handler,
+)
+
+app.add_exception_handler(HTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(sqlalchemy.exc.SQLAlchemyError, db_exception_handler)
+app.add_exception_handler(Exception, generic_exception_handler)
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
