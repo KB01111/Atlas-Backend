@@ -29,8 +29,8 @@ async def db_exception_handler(request: Request, exc: sqlalchemy.exc.SQLAlchemyE
     )
 
 async def generic_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled exception: {str(exc)} | Path: {request.url}")
+    logger.error(f"Unhandled exception: {str(exc)} | Path: {request.url}", exc_info=True) # Include stack trace in logs
     return JSONResponse(
         status_code=500,
-        content=format_error_response(500, "An internal server error occurred.", "internal_error"),
+        content=format_error_response(500, "An internal server error occurred. Please check the logs.", "internal_error"), # More informative message
     )
