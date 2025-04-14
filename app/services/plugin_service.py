@@ -4,7 +4,7 @@ from app.models.plugin import (
     PluginConfigurationUpdate,
 )
 from app.services.key_service import KeyService
-from typing import List, Optional
+from typing import Optional
 
 PLUGIN_TABLE = "plugin_configurations"
 
