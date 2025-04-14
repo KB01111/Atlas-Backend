@@ -6,10 +6,11 @@ from app.models.plugin import (
 )
 from app.services.plugin_service import PluginService
 from typing import List
-# Placeholder for user authentication dependency
-def get_current_user_id():
+def get_current_user_id(token: str = Depends(oauth2_scheme)):
     # Replace with actual authentication logic
-    return "test-user-id"
+    # Example: Verify token and return user ID
+    user = verify_token(token)
+    return user.id if user else None
 
 router = APIRouter()
 
