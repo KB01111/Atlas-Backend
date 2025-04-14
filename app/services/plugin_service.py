@@ -50,7 +50,8 @@ class PluginService:
         # Fetch config, decrypt, and execute plugin logic
         config = await PluginService.get_plugin_config(config_id, inputs.get("user_id"))
         if not config:
-            raise PluginConfigurationNotFoundError("Plugin configuration not found")
+            # Define or import PluginConfigurationNotFoundError before using it.
+            raise Exception("Plugin configuration not found")
         # Decrypt config (placeholder)
         decrypted_config = KeyService.decrypt_config(config["encrypted_config_blob"], config["user_id"])
         # Plugin execution logic goes here
