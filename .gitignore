@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# OS/system files
+.DS_Store
+Thumbs.db
+
+# Logs and test outputs
+*.log
+coverage.xml
+htmlcov/
+.tox/
+
+# Database
+*.db
+*.sqlite3
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+docker-compose.override.yml
+.env.docker
+
+# API keys and secrets
+.env
+.env.*
+*.key
+*.pem
+secrets/
+private.key
+public.key
+*.crt
+
+# Miscellaneous
+node_modules/
+
+# Supabase
+.supabase/
+
+# Custom local overrides
+local_settings.py
