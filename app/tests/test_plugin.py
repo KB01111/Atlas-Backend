@@ -54,5 +54,6 @@
 #     response = client.post("/api/v1/plugins/test-id/execute", json=payload)
 #     assert response.status_code in (500, 401, 403)
 
+
 def test_plugin_smoke():
     assert True

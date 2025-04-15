@@ -12,6 +12,7 @@ Any reference to 'a2a' in this codebase refers exclusively to the Google A2A pro
 https://google.github.io/A2A/#/documentation
 """
 
+
 class A2AMessageEnvelope(BaseModel):
     """
     Google A2A protocol message envelope.
@@ -20,11 +21,17 @@ class A2AMessageEnvelope(BaseModel):
     sender: str = Field(..., description="Sender agent URL or ID")
     receiver: str = Field(..., description="Receiver agent URL or ID")
     message_id: str = Field(..., description="Unique message ID")
-    timestamp: datetime = Field(default_factory=datetime.utcnow, description="UTC timestamp of the message")
+    timestamp: datetime = Field(
+        default_factory=datetime.utcnow, description="UTC timestamp of the message"
+    )
     protocol_version: str = Field(default="1.0", description="A2A protocol version")
     method: str = Field(..., description="A2A method to call")
-    params: dict[str, Any] = Field(default_factory=dict, description="Method parameters")
-    metadata: Optional[dict[str, Any]] = Field(default=None, description="Optional metadata for extensibility")
+    params: dict[str, Any] = Field(
+        default_factory=dict, description="Method parameters"
+    )
+    metadata: Optional[dict[str, Any]] = Field(
+        default=None, description="Optional metadata for extensibility"
+    )
 
 
 class A2ARegistrationRequest(BaseModel):
@@ -34,7 +41,9 @@ class A2ARegistrationRequest(BaseModel):
 
     agent_url: str = Field(..., description="Agent's public endpoint URL")
     agent_name: str = Field(..., description="Human-readable agent name")
-    capabilities: Optional[dict[str, Any]] = Field(default=None, description="Agent capabilities/features")
+    capabilities: Optional[dict[str, Any]] = Field(
+        default=None, description="Agent capabilities/features"
+    )
 
 
 class A2ARegistrationResponse(BaseModel):
@@ -93,7 +102,9 @@ class A2ARequest(BaseModel):
 
     to_agent_url: str = Field(..., description="Target agent endpoint URL")
     method: str = Field(..., description="A2A method to call")
-    params: dict[str, Any] = Field(default_factory=dict, description="Method parameters")
+    params: dict[str, Any] = Field(
+        default_factory=dict, description="Method parameters"
+    )
 
 
 class A2AResponse(BaseModel):

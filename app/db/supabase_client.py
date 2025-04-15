@@ -6,7 +6,9 @@ from app.core.config import get_settings
 
 class SupabaseClientError(Exception):
     """Custom exception for Supabase client errors."""
+
     pass
+
 
 def get_supabase_client() -> Client:
     """
@@ -23,6 +25,7 @@ def get_supabase_client() -> Client:
     except Exception as e:
         logger.error(f"Failed to create Supabase client: {e}")
         raise SupabaseClientError("Could not initialize Supabase client")
+
 
 # Do NOT create a global supabase client at import time.
 # Always use get_supabase_client() when you need the client.

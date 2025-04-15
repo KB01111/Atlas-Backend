@@ -8,6 +8,7 @@ class SessionParticipant(BaseModel):
     user_id: str
     role: Optional[str] = "user"
 
+
 class ChatSessionBase(BaseModel):
     name: Optional[str] = None
     agent_id: Optional[str] = None
@@ -18,15 +19,19 @@ class ChatSessionBase(BaseModel):
     graph_id: Optional[str] = None
     memory_config: Optional[dict] = None  # Example: Configuration for memory management
     plugin_config_id: Optional[str] = None
-    a2a_config: Optional[dict] = None  # Example: Configuration for agent-to-agent communication
+    a2a_config: Optional[dict] = (
+        None  # Example: Configuration for agent-to-agent communication
+    )
 
-    @field_validator('participants', mode='before')
+    @field_validator("participants", mode="before")
     @classmethod
     def default_participants(cls, v):
         return v or []
 
+
 class ChatSessionCreate(ChatSessionBase):
     pass
+
 
 class ChatSessionOut(ChatSessionBase):
     id: str
@@ -35,14 +40,17 @@ class ChatSessionOut(ChatSessionBase):
     updated_at: Optional[datetime]
     model_config = ConfigDict(from_attributes=True)
 
+
 class ChatMessageBase(BaseModel):
     content: str
     sender_id: str
     sender_type: str  # "user", "agent", or "system"
     metadata: Optional[Any] = None
 
+
 class ChatMessageCreate(ChatMessageBase):
     pass
+
 
 class ChatMessageOut(ChatMessageBase):
     id: str

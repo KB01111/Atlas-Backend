@@ -9,11 +9,14 @@ class PluginConfigurationBase(BaseModel):
     name: str
     encrypted_config_blob: str
 
+
 class PluginConfigurationCreate(PluginConfigurationBase):
     pass
 
+
 class PluginConfigurationUpdate(PluginConfigurationBase):
     pass
+
 
 class PluginConfigurationOut(PluginConfigurationBase):
     id: str

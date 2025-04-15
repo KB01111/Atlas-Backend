@@ -19,6 +19,7 @@ async def test_a2a_register_agent(async_client: AsyncClient):
     assert data["success"] is True
     assert "agent_id" in data
 
+
 @pytest.mark.asyncio
 async def test_a2a_handshake(async_client: AsyncClient):
     payload = {"agent_id": "agent-123", "token": "secret-token"}
@@ -27,6 +28,7 @@ async def test_a2a_handshake(async_client: AsyncClient):
     data = response.json()
     assert data["success"] is True
     assert "session_token" in data
+
 
 @pytest.mark.asyncio
 async def test_a2a_send_and_receive(async_client: AsyncClient):
@@ -47,6 +49,7 @@ async def test_a2a_send_and_receive(async_client: AsyncClient):
     data = response.json()
     assert data["result"] == "A2A task received"
 
+
 @pytest.mark.asyncio
 async def test_a2a_status(async_client: AsyncClient):
     response = await async_client.get("/api/v1/a2a/status/agent-123")
@@ -54,9 +57,12 @@ async def test_a2a_status(async_client: AsyncClient):
     data = response.json()
     assert data["status"] == "online"
 
+
 @pytest.mark.asyncio
 async def test_a2a_error(async_client: AsyncClient):
-    response = await async_client.get("/api/v1/a2a/error", params={"error": "fail", "code": 400})
+    response = await async_client.get(
+        "/api/v1/a2a/error", params={"error": "fail", "code": 400}
+    )
     assert response.status_code == 200
     data = response.json()
     assert data["error"] == "fail"

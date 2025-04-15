@@ -28,7 +28,9 @@ class A2AService:
     """Implements Google A2A protocol operations: registration, handshake, relay, status, error."""
 
     @staticmethod
-    async def register_agent(payload: A2ARegistrationRequest) -> A2ARegistrationResponse:
+    async def register_agent(
+        payload: A2ARegistrationRequest,
+    ) -> A2ARegistrationResponse:
         """Register this agent with the A2A registry or another agent."""
         # TODO: Implement registration logic (DB, registry, etc.)
         return A2ARegistrationResponse(success=True, agent_id="agent-123")
@@ -63,10 +65,19 @@ class A2AService:
                 resp.raise_for_status()
                 data = resp.json()
             agent_card = await A2AService.fetch_agent_card(payload.to_agent_url)
-            return A2AResponse(result=data.get("result"), error=data.get("error"), agent_card=agent_card)
+            return A2AResponse(
+                result=data.get("result"),
+                error=data.get("error"),
+                agent_card=agent_card,
+            )
         except httpx.HTTPStatusError as exc:
-            logger.error(f"A2A send HTTP error: {exc.response.status_code} {exc.response.text}")
-            return A2AResponse(result=None, error=f"HTTP error {exc.response.status_code}: {exc.response.text}")
+            logger.error(
+                f"A2A send HTTP error: {exc.response.status_code} {exc.response.text}"
+            )
+            return A2AResponse(
+                result=None,
+                error=f"HTTP error {exc.response.status_code}: {exc.response.text}",
+            )
         except httpx.RequestError as exc:
             logger.error(f"A2A send request error: {exc}")
             return A2AResponse(result=None, error=str(exc))

@@ -11,6 +11,7 @@ AGENT_TABLE = "agents"
 # For example:
 # supabase = get_supabase_client()
 
+
 async def create_agent(user_id: str, agent: AgentCreate) -> dict:
     """
     Create a new agent for a user.
@@ -29,6 +30,7 @@ async def create_agent(user_id: str, agent: AgentCreate) -> dict:
         logger.error(f"Error creating agent: {e}")
         raise SupabaseClientError("Failed to create agent")
 
+
 async def get_agent_by_id(agent_id: str, user_id: str) -> Optional[dict]:
     """
     Retrieve an agent by ID and user.
@@ -37,13 +39,21 @@ async def get_agent_by_id(agent_id: str, user_id: str) -> Optional[dict]:
     """
     supabase = get_supabase_client()
     try:
-        res = supabase.table(AGENT_TABLE).select("*").eq("id", agent_id).eq("user_id", user_id).single().execute()
+        res = (
+            supabase.table(AGENT_TABLE)
+            .select("*")
+            .eq("id", agent_id)
+            .eq("user_id", user_id)
+            .single()
+            .execute()
+        )
         if res.data:
             return res.data
         return None
     except Exception as e:
         logger.error(f"Error fetching agent by id: {e}")
         raise SupabaseClientError("Failed to fetch agent")
+
 
 async def get_agents_by_user(user_id: str) -> List[dict]:
     """
@@ -53,13 +63,22 @@ async def get_agents_by_user(user_id: str) -> List[dict]:
     """
     supabase = get_supabase_client()
     try:
-        res = supabase.table(AGENT_TABLE).select("*").eq("user_id", user_id).eq("archived", False).execute()
+        res = (
+            supabase.table(AGENT_TABLE)
+            .select("*")
+            .eq("user_id", user_id)
+            .eq("archived", False)
+            .execute()
+        )
         return res.data or []
     except Exception as e:
         logger.error(f"Error fetching agents by user: {e}")
         raise SupabaseClientError("Failed to fetch agents")
 
-async def update_agent(agent_id: str, user_id: str, agent: AgentUpdate) -> Optional[dict]:
+
+async def update_agent(
+    agent_id: str, user_id: str, agent: AgentUpdate
+) -> Optional[dict]:
     """
     Update an agent for a user.
     Returns updated agent dict or None.
@@ -68,13 +87,20 @@ async def update_agent(agent_id: str, user_id: str, agent: AgentUpdate) -> Optio
     data = agent.dict(exclude_unset=True)
     supabase = get_supabase_client()
     try:
-        res = supabase.table(AGENT_TABLE).update(data).eq("id", agent_id).eq("user_id", user_id).execute()
+        res = (
+            supabase.table(AGENT_TABLE)
+            .update(data)
+            .eq("id", agent_id)
+            .eq("user_id", user_id)
+            .execute()
+        )
         if res.data:
             return res.data[0]
         return None
     except Exception as e:
         logger.error(f"Error updating agent: {e}")
         raise SupabaseClientError("Failed to update agent")
+
 
 async def archive_agent(agent_id: str, user_id: str) -> Optional[dict]:
     """
@@ -84,13 +110,20 @@ async def archive_agent(agent_id: str, user_id: str) -> Optional[dict]:
     """
     supabase = get_supabase_client()
     try:
-        res = supabase.table(AGENT_TABLE).update({"archived": True}).eq("id", agent_id).eq("user_id", user_id).execute()
+        res = (
+            supabase.table(AGENT_TABLE)
+            .update({"archived": True})
+            .eq("id", agent_id)
+            .eq("user_id", user_id)
+            .execute()
+        )
         if res.data:
             return res.data[0]
         return None
     except Exception as e:
         logger.error(f"Error archiving agent: {e}")
         raise SupabaseClientError("Failed to archive agent")
+
 
 # TODO: When async supabase client is available, refactor these methods to async and use await.
 # TODO: Integrate KeyService for secure secret handling when available.

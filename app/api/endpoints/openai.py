@@ -8,11 +8,13 @@ from app.core.config import get_settings
 
 router = APIRouter(prefix="/openai", tags=["openai"])
 
+
 class AssistantCreateRequest(BaseModel):
     name: str
     instructions: Optional[str] = None
     tools: Optional[List[Any]] = None
     model: Optional[str] = "gpt-4-turbo"
+
 
 @router.post("/assistant")
 async def create_assistant(req: AssistantCreateRequest):
@@ -28,6 +30,7 @@ async def create_assistant(req: AssistantCreateRequest):
     except Exception as e:
         return {"error": str(e)}
 
+
 @router.get("/assistant")
 async def list_assistants():
     try:
@@ -37,8 +40,10 @@ async def list_assistants():
     except Exception as e:
         return {"error": str(e)}
 
+
 class ThreadCreateRequest(BaseModel):
     pass
+
 
 @router.post("/thread")
 async def create_thread(req: ThreadCreateRequest):
@@ -49,6 +54,7 @@ async def create_thread(req: ThreadCreateRequest):
     except Exception as e:
         return {"error": str(e)}
 
+
 @router.get("/thread")
 async def list_threads():
     try:
@@ -58,10 +64,12 @@ async def list_threads():
     except Exception as e:
         return {"error": str(e)}
 
+
 class MessageCreateRequest(BaseModel):
     thread_id: str
     role: str
     content: str
+
 
 @router.post("/message")
 async def add_message(req: MessageCreateRequest):
@@ -76,9 +84,11 @@ async def add_message(req: MessageCreateRequest):
     except Exception as e:
         return {"error": str(e)}
 
+
 class RunAssistantRequest(BaseModel):
     assistant_id: str
     thread_id: str
+
 
 @router.post("/run")
 async def run_assistant(req: RunAssistantRequest):

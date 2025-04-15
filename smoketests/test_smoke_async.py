@@ -10,6 +10,7 @@ async def async_client():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         yield ac
 
+
 @pytest.mark.asyncio
 async def test_smoke(async_client):
     response = await async_client.get("/api/v1/agents/")

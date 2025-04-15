@@ -23,20 +23,25 @@ class AgentBase(BaseModel):
     agent_type: Optional[str] = None
     graph_id: Optional[str] = None
     memory_config: Optional[dict] = None  # Example: Configuration for memory management
-    a2a_config: Optional[dict] = None  # Example: Configuration for agent-to-agent communication
+    a2a_config: Optional[dict] = (
+        None  # Example: Configuration for agent-to-agent communication
+    )
     plugin_config_id: Optional[str] = None
     output_schema: Optional[dict] = None  # Example: Schema for the agent's output
 
-    @field_validator('tags', mode='before')
+    @field_validator("tags", mode="before")
     @classmethod
     def default_tags(cls, v):
         return v or []
 
+
 class AgentCreate(AgentBase):
     pass
 
+
 class AgentUpdate(AgentBase):
     pass
+
 
 class AgentOut(AgentBase):
     id: str

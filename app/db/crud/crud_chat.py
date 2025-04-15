@@ -15,6 +15,7 @@ MESSAGE_TABLE = "chat_messages"
 # For example:
 # supabase = get_supabase_client()
 
+
 async def create_session(user_id: str, session: ChatSessionCreate) -> dict:
     """
     Create a new chat session for a user.
@@ -33,6 +34,7 @@ async def create_session(user_id: str, session: ChatSessionCreate) -> dict:
         logger.error(f"Error creating chat session: {e}")
         raise SupabaseClientError("Failed to create chat session")
 
+
 async def list_sessions(user_id: str) -> List[dict]:
     """
     List all non-archived chat sessions for a user, ordered by creation time (desc).
@@ -41,11 +43,19 @@ async def list_sessions(user_id: str) -> List[dict]:
     """
     supabase = get_supabase_client()
     try:
-        res = supabase.table(SESSION_TABLE).select("*").eq("user_id", user_id).eq("archived", False).order("created_at", desc=True).execute()
+        res = (
+            supabase.table(SESSION_TABLE)
+            .select("*")
+            .eq("user_id", user_id)
+            .eq("archived", False)
+            .order("created_at", desc=True)
+            .execute()
+        )
         return res.data or []
     except Exception as e:
         logger.error(f"Error listing chat sessions: {e}")
         raise SupabaseClientError("Failed to list chat sessions")
+
 
 async def save_message(chat_session_id: str, message: ChatMessageCreate) -> dict:
     """
@@ -65,7 +75,10 @@ async def save_message(chat_session_id: str, message: ChatMessageCreate) -> dict
         logger.error(f"Error saving chat message: {e}")
         raise SupabaseClientError("Failed to save chat message")
 
-async def get_messages(chat_session_id: str, limit: int = 50, offset: int = 0) -> List[dict]:
+
+async def get_messages(
+    chat_session_id: str, limit: int = 50, offset: int = 0
+) -> List[dict]:
     """
     Retrieve messages for a chat session, paginated.
     Returns empty list if none found.

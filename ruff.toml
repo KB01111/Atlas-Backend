@@ -22,8 +22,7 @@ exclude = ["venv", "__pycache__", ".venv", ".git", ".ruff_cache", ".pytest_cache
 # Enable autofix for supported rules
 fixable = ["E", "F", "W", "I", "UP", "B", "N", "RUF"]
 
-# Per-file ignores (example)
-[per-file-ignores]
+[lint.per-file-ignores]
 "app/tests/*" = ["D", "PL"]  # Ignore docstring/pylint in tests
 
 # Set max line length (for compatible Ruff versions)

@@ -10,18 +10,22 @@ class WorkflowStep(BaseModel):
     config_id: Optional[str] = None  # Plugin or agent config reference
     parameters: Optional[Dict[str, Any]] = None
 
+
 class WorkflowBase(BaseModel):
     name: str
     description: Optional[str] = None
     steps: List[WorkflowStep]
 
+
 class WorkflowCreate(WorkflowBase):
     pass
+
 
 class WorkflowUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     steps: Optional[List[WorkflowStep]] = None
+
 
 class WorkflowOut(WorkflowBase):
     id: str
@@ -30,8 +34,10 @@ class WorkflowOut(WorkflowBase):
     updated_at: Optional[datetime]
     model_config = ConfigDict(from_attributes=True)
 
+
 class WorkflowRunRequest(BaseModel):
     inputs: Dict[str, Any]
+
 
 class WorkflowRunResult(BaseModel):
     status: str

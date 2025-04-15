@@ -31,7 +31,9 @@ app.add_exception_handler(Exception, generic_exception_handler)
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.BACKEND_CORS_ORIGINS] if settings.BACKEND_CORS_ORIGINS != "*" else ["*"],
+    allow_origins=[settings.BACKEND_CORS_ORIGINS]
+    if settings.BACKEND_CORS_ORIGINS != "*"
+    else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -47,6 +49,7 @@ app.include_router(agents_router, prefix="/api/v1")
 app.include_router(chat_router, prefix="/api/v1")
 app.include_router(plugin_router, prefix="/api/v1")
 app.include_router(workflow_router, prefix="/api/v1")
+
 
 @app.get("/")
 async def root():

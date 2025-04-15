@@ -9,6 +9,7 @@ router = APIRouter()
 
 active_connections: List[WebSocket] = []
 
+
 @router.websocket("/ws/events")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
@@ -20,6 +21,7 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         active_connections.remove(websocket)
 
+
 # Broadcast helper for backend events
 async def broadcast_event(event: str, payload):
     for ws in active_connections:
@@ -28,8 +30,11 @@ async def broadcast_event(event: str, payload):
         except Exception:
             pass
 
+
 # Register broadcast with the realtime manager
 realtime_manager.subscribe(
     "broadcast",
-    lambda payload: asyncio.create_task(broadcast_event(payload["event"], payload["payload"]))
+    lambda payload: asyncio.create_task(
+        broadcast_event(payload["event"], payload["payload"])
+    ),
 )

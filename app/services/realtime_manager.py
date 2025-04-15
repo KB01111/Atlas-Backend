@@ -8,6 +8,7 @@ class RealtimeManager:
     """
     Manages real-time event subscriptions and broadcasts for backend (Supabase Realtime or WebSocket).
     """
+
     def __init__(self):
         self.subscribers: Dict[str, List[Callable[[Any], None]]] = {}
 
@@ -25,6 +26,7 @@ class RealtimeManager:
                     await result
             except Exception as e:
                 logger.error(f"Error in realtime subscriber for '{event}': {e}")
+
 
 # Singleton instance for app-wide usage
 realtime_manager = RealtimeManager()
