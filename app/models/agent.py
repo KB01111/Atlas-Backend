@@ -1,13 +1,15 @@
-from pydantic import BaseModel, Field
-from typing import Optional, List, Any
 from datetime import datetime
+from typing import Any, List, Optional
+
+from pydantic import BaseModel, ConfigDict, field_validator
+
 
 class AgentBase(BaseModel):
     name: str
     description: Optional[str] = None
     avatar_url: Optional[str] = None
     color_theme: Optional[str] = None
-    tags: Optional[List[str]] = []
+    tags: Optional[List[str]] = None
     provider: Optional[str] = None
     model: Optional[str] = None
     system_prompt: Optional[str] = None
@@ -25,6 +27,11 @@ class AgentBase(BaseModel):
     plugin_config_id: Optional[str] = None
     output_schema: Optional[dict] = None  # Example: Schema for the agent's output
 
+    @field_validator('tags', mode='before')
+    @classmethod
+    def default_tags(cls, v):
+        return v or []
+
 class AgentCreate(AgentBase):
     pass
 
@@ -36,6 +43,4 @@ class AgentOut(AgentBase):
     user_id: str
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

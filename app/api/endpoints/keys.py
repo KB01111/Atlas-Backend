@@ -1,12 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
 from typing import List, Optional
+
+from fastapi import APIRouter, Depends, status
+from pydantic import BaseModel
+
 from app.core.security import get_current_user_id
 from app.services.key_service import (
-    store_api_key,
-    list_api_keys,
     delete_api_key,
+    list_api_keys,
+    store_api_key,
 )
+
 router = APIRouter(prefix="/keys", tags=["keys"])
 
 class APIKeyIn(BaseModel):

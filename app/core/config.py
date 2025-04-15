@@ -1,14 +1,21 @@
-from pydantic import BaseSettings, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
-    SUPABASE_URL: str = Field(..., env="SUPABASE_URL")
-    SUPABASE_SERVICE_ROLE_KEY: str = Field(..., env="SUPABASE_SERVICE_ROLE_KEY")
-    OPENAI_API_KEY: str = Field(..., env="OPENAI_API_KEY")
-    LITELLM_API_KEY: str = Field(..., env="LITELLM_API_KEY")
-    LOG_LEVEL: str = Field("INFO", env="LOG_LEVEL")
-    BACKEND_CORS_ORIGINS: str = Field("*", env="BACKEND_CORS_ORIGINS")
+    SUPABASE_URL: str
+    SUPABASE_SERVICE_ROLE_KEY: str
+    OPENAI_API_KEY: str
+    LITELLM_API_KEY: str
+    LOG_LEVEL: str = "INFO"
+    BACKEND_CORS_ORIGINS: str = "*"
 
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(env_file=".env")
 
-settings = Settings()
+# Lazy-load settings: do NOT instantiate at module level
+_settings_instance = None
+
+def get_settings() -> Settings:
+    global _settings_instance
+    if _settings_instance is None:
+        _settings_instance = Settings()
+    return _settings_instance

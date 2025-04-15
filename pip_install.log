@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "C:\Users\kevin\AppData\Local\Programs\Python\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Users\kevin\AppData\Local\Programs\Python\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\Scripts\pip.exe\__main__.py", line 4, in <module>
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_internal\cli\main.py", line 9, in <module>
+    from pip._internal.cli.autocompletion import autocomplete
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_internal\cli\autocompletion.py", line 10, in <module>
+    from pip._internal.cli.main_parser import create_main_parser
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_internal\cli\main_parser.py", line 9, in <module>
+    from pip._internal.build_env import get_runnable_pip
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_internal\build_env.py", line 19, in <module>
+    from pip._internal.cli.spinners import open_spinner
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_internal\cli\spinners.py", line 9, in <module>
+    from pip._internal.utils.logging import get_indentation
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_internal\utils\logging.py", line 29, in <module>
+    from pip._internal.utils.misc import ensure_dir
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_internal\utils\misc.py", line 42, in <module>
+    from pip._internal.exceptions import CommandError, ExternallyManagedEnvironment
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_internal\exceptions.py", line 18, in <module>
+    from pip._vendor.requests.models import Request, Response
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_vendor\requests\__init__.py", line 45, in <module>
+    from .exceptions import RequestsDependencyWarning
+  File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_vendor\requests\exceptions.py", line 9, in <module>
+    from .compat import JSONDecodeError as CompatJSONDecodeError
+ImportError: cannot import name 'JSONDecodeError' from 'pip._vendor.requests.compat' (C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\.venv\lib\site-packages\pip\_vendor\requests\compat.py)

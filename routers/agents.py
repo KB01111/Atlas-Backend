@@ -1,11 +1,12 @@
+from uuid import uuid4
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from uuid import uuid4
 
 from ..database import get_db
-from ..models import Agent, AgentFramework
-from ..schemas import AgentCreate, AgentUpdate, AgentOut
+from ..models import Agent
+from ..schemas import AgentCreate, AgentOut, AgentUpdate
 
 router = APIRouter(prefix="/agents", tags=["agents"])
 
@@ -22,7 +23,7 @@ async def create_agent(agent: AgentCreate, db: AsyncSession = Depends(get_db)):
 
 @router.get("/", response_model=list[AgentOut])
 async def list_agents(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Agent).where(Agent.archived == False))
+    result = await db.execute(select(Agent).where(Agent.archived is False))
     agents = result.scalars().all()
     return agents
 

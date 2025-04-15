@@ -1,6 +1,8 @@
-from pydantic import BaseModel
-from typing import Optional, Any
 from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict
+
 
 class PluginConfigurationBase(BaseModel):
     plugin_type: str
@@ -18,6 +20,4 @@ class PluginConfigurationOut(PluginConfigurationBase):
     user_id: str
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

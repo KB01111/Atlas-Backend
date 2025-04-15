@@ -1,0 +1,31 @@
+# Ruff configuration for Atlas-Backend
+[lint]
+select = [
+    "E",    # Pycodestyle errors (PEP 8)
+    "F",    # Pyflakes
+    "W",    # Warnings
+    "C90",  # McCabe complexity
+    "N",    # pep8-naming
+    "B",    # flake8-bugbear
+    "I",    # isort
+    "UP",   # pyupgrade
+    "D",    # pydocstyle (docstring conventions)
+    "PL",   # pylint
+    "RUF",  # Ruff-specific rules
+]
+ignore = [
+    "D100",  # Ignore missing docstring in public module
+    "D104",  # Ignore missing docstring in public package
+]
+exclude = ["venv", "__pycache__", ".venv", ".git", ".ruff_cache", ".pytest_cache"]
+
+# Enable autofix for supported rules
+fixable = ["E", "F", "W", "I", "UP", "B", "N", "RUF"]
+
+# Per-file ignores (example)
+[per-file-ignores]
+"app/tests/*" = ["D", "PL"]  # Ignore docstring/pylint in tests
+
+# Set max line length (for compatible Ruff versions)
+# [format]
+# line-length = 100

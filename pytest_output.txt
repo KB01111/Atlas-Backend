@@ -1,0 +1,89 @@
+
+=================================== ERRORS ====================================
+__________________ ERROR collecting app/tests/test_agents.py __________________
+ImportError while importing test module 'C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\app\tests\test_agents.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+app\tests\test_agents.py:4: in <module>
+    from app.main import app
+app\main.py:15: in <module>
+    from app.api.endpoints import plugin, workflow, realtime, agents, openai, chat
+app\api\endpoints\plugin.py:5: in <module>
+    from app.services.plugin_service import PluginService, PluginServiceError
+app\services\plugin_service.py:6: in <module>
+    from app.services.key_service import KeyService
+app\services\key_service.py:4: in <module>
+    from supabase_py_vault import VaultClient
+E   ModuleNotFoundError: No module named 'supabase_py_vault'
+___________________ ERROR collecting app/tests/test_chat.py ___________________
+ImportError while importing test module 'C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\app\tests\test_chat.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+app\tests\test_chat.py:18: in <module>
+    from main import app
+main.py:7: in <module>
+    from app.core.config import settings
+E   ImportError: cannot import name 'settings' from 'app.core.config' (C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\app\core\config.py)
+__________________ ERROR collecting app/tests/test_health.py __________________
+ImportError while importing test module 'C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\app\tests\test_health.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+app\tests\test_health.py:2: in <module>
+    import pytest_asyncio
+E   ModuleNotFoundError: No module named 'pytest_asyncio'
+_________________ ERROR collecting app/tests/test_workflow.py _________________
+.venv\Lib\site-packages\_pytest\python.py:493: in importtestmodule
+    mod = import_path(
+.venv\Lib\site-packages\_pytest\pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+.venv\Lib\site-packages\_pytest\assertion\rewrite.py:176: in exec_module
+    source_stat, co = _rewrite_test(fn, self.config)
+.venv\Lib\site-packages\_pytest\assertion\rewrite.py:358: in _rewrite_test
+    co = compile(tree, strfn, "exec", dont_inherit=True)
+E     File "C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\app\tests\test_workflow.py", line 17
+E       async with AsyncClient(app=app, base_url="http://test") as ac:
+E       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   SyntaxError: 'async with' outside async function
+_______________ ERROR collecting smoketests/test_smoke_async.py _______________
+ImportError while importing test module 'C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\smoketests\test_smoke_async.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+smoketests\test_smoke_async.py:2: in <module>
+    import pytest_asyncio
+E   ModuleNotFoundError: No module named 'pytest_asyncio'
+_______________ ERROR collecting test_smoketests/test_smoke.py ________________
+ImportError while importing test module 'C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\test_smoketests\test_smoke.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+test_smoketests\test_smoke.py:2: in <module>
+    import pytest_asyncio
+E   ModuleNotFoundError: No module named 'pytest_asyncio'
+=========================== short test summary info ===========================
+ERROR app/tests/test_agents.py
+ERROR app/tests/test_chat.py
+ERROR app/tests/test_health.py
+ERROR app/tests/test_workflow.py
+ERROR smoketests/test_smoke_async.py
+ERROR test_smoketests/test_smoke.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 6 errors during collection !!!!!!!!!!!!!!!!!!!
+1 warning, 6 errors in 0.74s

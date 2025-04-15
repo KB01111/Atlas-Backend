@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
-from typing import Optional, List, Any
 from datetime import datetime
+from typing import Any, List, Optional
+
+from pydantic import BaseModel, ConfigDict, field_validator
+
 
 class SessionParticipant(BaseModel):
     user_id: str
@@ -9,7 +11,7 @@ class SessionParticipant(BaseModel):
 class ChatSessionBase(BaseModel):
     name: Optional[str] = None
     agent_id: Optional[str] = None
-    participants: Optional[List[SessionParticipant]] = []
+    participants: Optional[List[SessionParticipant]] = None
     archived: Optional[bool] = False
 
     # Extensibility fields
@@ -17,6 +19,11 @@ class ChatSessionBase(BaseModel):
     memory_config: Optional[dict] = None  # Example: Configuration for memory management
     plugin_config_id: Optional[str] = None
     a2a_config: Optional[dict] = None  # Example: Configuration for agent-to-agent communication
+
+    @field_validator('participants', mode='before')
+    @classmethod
+    def default_participants(cls, v):
+        return v or []
 
 class ChatSessionCreate(ChatSessionBase):
     pass
@@ -26,9 +33,7 @@ class ChatSessionOut(ChatSessionBase):
     user_id: str
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class ChatMessageBase(BaseModel):
     content: str
@@ -43,6 +48,4 @@ class ChatMessageOut(ChatMessageBase):
     id: str
     chat_session_id: str
     timestamp: datetime
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

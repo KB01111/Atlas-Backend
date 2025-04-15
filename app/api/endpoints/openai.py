@@ -1,8 +1,10 @@
+from typing import Any, List, Optional
+
+import openai
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import List, Optional, Any
-import openai
-from app.core.config import settings
+
+from app.core.config import get_settings
 
 router = APIRouter(prefix="/openai", tags=["openai"])
 
@@ -15,7 +17,7 @@ class AssistantCreateRequest(BaseModel):
 @router.post("/assistant")
 async def create_assistant(req: AssistantCreateRequest):
     try:
-        openai.api_key = settings.OPENAI_API_KEY
+        openai.api_key = get_settings().OPENAI_API_KEY
         assistant = openai.beta.assistants.create(
             name=req.name,
             instructions=req.instructions,
@@ -29,7 +31,7 @@ async def create_assistant(req: AssistantCreateRequest):
 @router.get("/assistant")
 async def list_assistants():
     try:
-        openai.api_key = settings.OPENAI_API_KEY
+        openai.api_key = get_settings().OPENAI_API_KEY
         assistants = openai.beta.assistants.list()
         return {"assistants": assistants}
     except Exception as e:
@@ -41,7 +43,7 @@ class ThreadCreateRequest(BaseModel):
 @router.post("/thread")
 async def create_thread(req: ThreadCreateRequest):
     try:
-        openai.api_key = settings.OPENAI_API_KEY
+        openai.api_key = get_settings().OPENAI_API_KEY
         thread = openai.beta.threads.create()
         return {"thread": thread}
     except Exception as e:
@@ -50,7 +52,7 @@ async def create_thread(req: ThreadCreateRequest):
 @router.get("/thread")
 async def list_threads():
     try:
-        openai.api_key = settings.OPENAI_API_KEY
+        openai.api_key = get_settings().OPENAI_API_KEY
         threads = openai.beta.threads.list()
         return {"threads": threads}
     except Exception as e:
@@ -64,7 +66,7 @@ class MessageCreateRequest(BaseModel):
 @router.post("/message")
 async def add_message(req: MessageCreateRequest):
     try:
-        openai.api_key = settings.OPENAI_API_KEY
+        openai.api_key = get_settings().OPENAI_API_KEY
         message = openai.beta.threads.messages.create(
             thread_id=req.thread_id,
             role=req.role,
@@ -81,7 +83,7 @@ class RunAssistantRequest(BaseModel):
 @router.post("/run")
 async def run_assistant(req: RunAssistantRequest):
     try:
-        openai.api_key = settings.OPENAI_API_KEY
+        openai.api_key = get_settings().OPENAI_API_KEY
         run = openai.beta.threads.runs.create(
             thread_id=req.thread_id,
             assistant_id=req.assistant_id,

@@ -1,42 +1,52 @@
-from app.db.supabase_client import supabase
-from typing import List, Optional
 from datetime import datetime
-import base64
-import os
+from typing import Optional
+
+from app.db.supabase_client import get_supabase_client
 
 KEYS_TABLE = "user_api_keys"
 
-def _encrypt_key(key: str) -> str:
-    # Simple base64 "encryption" for demo; replace with real encryption or Supabase Vault in production
-    return base64.b64encode(key.encode()).decode()
+class KeyService:
+    """
+    Service for encrypting and decrypting plugin configuration blobs.
+    Encryption is currently a stub (no-op).
+    """
+    @staticmethod
+    def encrypt_config(blob: str, user_id: str) -> str:
+        """Stub for encrypting plugin config. Returns blob unchanged."""
+        # TODO: Implement real encryption
+        return blob
 
-def _decrypt_key(enc: str) -> str:
-    return base64.b64decode(enc.encode()).decode()
+    @staticmethod
+    def decrypt_config(blob: str, user_id: str) -> str:
+        """Stub for decrypting plugin config. Returns blob unchanged."""
+        # TODO: Implement real decryption
+        return blob
 
-async def store_api_key(user_id: str, service: str, key: str):
-    enc_key = _encrypt_key(key)
+async def store_api_key(user_id: str, service: str, key: str) -> None:
+    """Store an API key for a user and service in Supabase."""
     data = {
         "user_id": user_id,
         "service": service,
-        "key_enc": enc_key,
-        "created_at": datetime.utcnow().isoformat()
+        "created_at": datetime.utcnow().isoformat(),
     }
-    # Upsert: one key per user/service
+    supabase = get_supabase_client()
     res = supabase.table(KEYS_TABLE).upsert(data, on_conflict=["user_id", "service"]).execute()
     if res.error:
         raise Exception(res.error)
 
-async def list_api_keys(user_id: str) -> List[dict]:
+async def get_api_key(user_id: str, service: str) -> Optional[str]:
+    """Stub: Always returns None."""
+    return None
+
+async def list_api_keys(user_id: str) -> list[dict]:
+    """List all API keys for a user from Supabase."""
+    supabase = get_supabase_client()
     res = supabase.table(KEYS_TABLE).select("id,service,created_at,last_used_at").eq("user_id", user_id).execute()
     return res.data or []
 
-async def delete_api_key(user_id: str, key_id: str):
+async def delete_api_key(user_id: str, key_id: str) -> None:
+    """Delete an API key for a user from Supabase."""
+    supabase = get_supabase_client()
     res = supabase.table(KEYS_TABLE).delete().eq("user_id", user_id).eq("id", key_id).execute()
     if res.error:
         raise Exception(res.error)
-
-async def get_api_key(user_id: str, service: str) -> Optional[str]:
-    res = supabase.table(KEYS_TABLE).select("key_enc").eq("user_id", user_id).eq("service", service).single().execute()
-    if res.data and res.data.get("key_enc"):
-        return _decrypt_key(res.data["key_enc"])
-    return None

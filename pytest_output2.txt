@@ -1,0 +1,50 @@
+============================= test session starts =============================
+platform win32 -- Python 3.10.11, pytest-8.3.5, pluggy-1.5.0 -- C:\Users\kevin\AppData\Local\Programs\Python\Python310\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\kevin\OneDrive\Desktop\Atlas-Backend
+plugins: anyio-4.9.0, ddtrace-1.13.0, asyncio-0.21.1, cov-4.1.0, mock-3.14.0
+asyncio: mode=strict
+collecting ... collected 0 items / 1 error
+
+=================================== ERRORS ====================================
+__________________ ERROR collecting app/tests/test_agents.py __________________
+ImportError while importing test module 'C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\app\tests\test_agents.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python310\lib\importlib\__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+..\..\..\AppData\Local\Programs\Python\Python310\lib\site-packages\ddtrace\internal\module.py:216: in _exec_module
+    self.loader.exec_module(module)
+app\tests\test_agents.py:4: in <module>
+    from main import app
+..\..\..\AppData\Local\Programs\Python\Python310\lib\site-packages\ddtrace\internal\module.py:216: in _exec_module
+    self.loader.exec_module(module)
+main.py:15: in <module>
+    from app.api.endpoints.litellm import router as litellm_router
+..\..\..\AppData\Local\Programs\Python\Python310\lib\site-packages\ddtrace\internal\module.py:216: in _exec_module
+    self.loader.exec_module(module)
+app\api\endpoints\litellm.py:9: in <module>
+    from app.services.litellm_service import call_litellm_completion
+..\..\..\AppData\Local\Programs\Python\Python310\lib\site-packages\ddtrace\internal\module.py:216: in _exec_module
+    self.loader.exec_module(module)
+app\services\litellm_service.py:2: in <module>
+    from app.services.key_service import get_api_key
+..\..\..\AppData\Local\Programs\Python\Python310\lib\site-packages\ddtrace\internal\module.py:216: in _exec_module
+    self.loader.exec_module(module)
+app\services\key_service.py:1: in <module>
+    from app.db.supabase_client import supabase
+E   ImportError: cannot import name 'supabase' from 'app.db.supabase_client' (C:\Users\kevin\OneDrive\Desktop\Atlas-Backend\app\db\supabase_client.py)
+============================== warnings summary ===============================
+..\..\..\AppData\Local\Programs\Python\Python310\lib\site-packages\pydantic\_internal\_config.py:323
+  C:\Users\kevin\AppData\Local\Programs\Python\Python310\lib\site-packages\pydantic\_internal\_config.py:323: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+..\..\..\AppData\Local\Programs\Python\Python310\lib\site-packages\gotrue\types.py:659: 19 warnings
+  C:\Users\kevin\AppData\Local\Programs\Python\Python310\lib\site-packages\gotrue\types.py:659: PydanticDeprecatedSince20: The `update_forward_refs` method is deprecated; use `model_rebuild` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    model.update_forward_refs()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR app/tests/test_agents.py
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+======================== 20 warnings, 1 error in 2.53s ========================

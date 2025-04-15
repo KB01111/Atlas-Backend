@@ -1,0 +1,164 @@
+{
+  "description": "Windsurf AI rules providing context and guidelines for the Atlas AgentVerse project (Backend - Python/FastAPI).",
+  "version": "1.0",
+  "rules": [
+    // ========================================
+    // == Backend Rules (Python / FastAPI) ==
+    // ========================================
+    {
+      "id": "backend_base_python",
+      "description": "Core Python principles, project overview, key dependencies (Backend).",
+      "appliesTo": {
+        "language": "python",
+        "paths": ["ai-agent-backend/app/**/*.py"]
+      },
+      "guidelines": [
+        "Project: Atlas AgentVerse Backend (FastAPI, Python 3.10+).",
+        "Goal: API for managing AI agents, teams, workflows, chat, plugins, A2A communication.",
+        "Core Libs: FastAPI, Pydantic v2, supabase-py (async) / Prisma, LiteLLM, LangGraph, Pytest, Loguru, httpx.",
+        "Dependencies: Refer to @file:ai-agent-backend/pyproject.toml for specific versions.",
+        "Style: Strictly adhere to PEP 8. Use Ruff for formatting/linting (see @file:ai-agent-backend/ruff.toml).",
+        "Naming: Use snake_case for variables, functions, methods, files, directories. Use PascalCase for classes.",
+        "Types: Mandatory type hints for all function signatures (params & return) and complex variables. Avoid 'Any'.",
+        "Principles: Emphasize modularity, readability, maintainability, Single Responsibility Principle."
+      ]
+    },
+    {
+      "id": "backend_fastapi_arch",
+      "description": "Guidelines for FastAPI endpoints, service layer interactions, dependency injection, and async patterns.",
+      "appliesTo": {
+        "language": "python",
+        "paths": ["ai-agent-backend/app/api/endpoints/**/*.py", "ai-agent-backend/app/services/**/*.py"]
+      },
+      "guidelines": [
+        "Architecture: Thin Endpoints (in app/api/endpoints/): Validate request (Pydantic), check auth, delegate to Service layer. Handle HTTPExceptions.",
+        "Architecture: Fat Services (in app/services/): Contain business logic, orchestrate operations, interact with CRUD layer and external services. Raise custom exceptions.",
+        "FastAPI: Use APIRouter. Define explicit Pydantic request/response models (@file:ai-agent-backend/app/models/...). Use `async def` for all routes.",
+        "DI: Use `fastapi.Depends()` to inject services (KeyService, PluginService, WorkflowService), DB clients (Supabase/Prisma), and authenticated user object (from @file:ai-agent-backend/app/core/security.py).",
+        "Async: Ensure all I/O within services and endpoints is non-blocking (use `await` for `httpx`, `supabase-py` async methods / Prisma async methods, LLM calls, etc.)."
+      ]
+    },
+    {
+      "id": "backend_pydantic_models",
+      "description": "Rules for defining Pydantic models for validation, serialization, and structured outputs.",
+      "appliesTo": {
+        "language": "python",
+        "paths": ["ai-agent-backend/app/models/**/*.py"]
+      },
+      "guidelines": [
+        "Usage: Use Pydantic v2 `BaseModel` for API request/response schemas, internal DTOs, configuration, and structured LLM outputs (PydanticAI pattern).",
+        "Best Practices: Explicit type hints for all fields. Use validators (`@field_validator`) for complex logic. Use `ConfigDict` for model config (e.g., `from_attributes=True`).",
+        "Clarity: Prefer Pydantic models over raw dictionaries for structured data."
+      ]
+    },
+    {
+      "id": "backend_async_patterns",
+      "description": "Best practices for asynchronous programming (async/await, httpx, supabase-py/prisma).",
+      "appliesTo": {
+        "language": "python",
+        "paths": ["ai-agent-backend/app/**/*.py"]
+      },
+      "guidelines": [
+        "Mandatory Async: All potentially blocking I/O (DB, HTTP, LLM calls, file access if used) MUST use `async`/`await`.",
+        "HTTP Client: Use `httpx.AsyncClient` for all external HTTP requests. Manage client lifecycle appropriately (e.g., lifespan manager or dependency).",
+        "DB Client: Use asynchronous methods provided by `supabase-py` or the Prisma Python Client.",
+        "Concurrency: Use `asyncio.gather()` for concurrent independent async operations.",
+        "Avoid Blocking: Do NOT call synchronous blocking functions (e.g., `requests.get`, `time.sleep`) directly in `async def` functions."
+      ]
+    },
+    {
+      "id": "backend_supabase_crud",
+      "description": "Guidelines for interacting with Supabase PostgreSQL (via supabase-py or Prisma), Auth, and Vault.",
+      "appliesTo": {
+        "language": "python",
+        "paths": ["ai-agent-backend/app/db/crud/**/*.py", "ai-agent-backend/app/services/**/*.py"]
+      },
+      "guidelines": [
+        "Data Layer: Encapsulate all direct Supabase DB interactions within `app/db/crud/` functions. Services call these functions.",
+        "Client: Use `supabase-py` async methods OR the Prisma Client async methods (e.g., `await prisma.user.create(...)`). Choose one primary method for consistency within the CRUD layer.",
+        "Security (Secrets): Retrieve ALL secrets (API keys, DB connection string parts if needed, plugin credentials) exclusively via the `KeyService` which interfaces with Supabase Vault. NO hardcoded secrets.",
+        "Security (Auth/RLS): Ensure CRUD operations respect user context passed from services. Be mindful of Supabase Row-Level Security policies (reference RLS definitions if available: @file:path/to/rls.sql).",
+        "Error Handling: Catch specific Supabase client or Prisma client exceptions (e.g., `prisma.errors.PrismaError`) in CRUD layer and raise custom application exceptions."
+      ]
+    },
+    {
+      "id": "backend_langgraph_core",
+      "description": "Rules for defining and implementing workflows using LangGraph.",
+      "appliesTo": {
+        "language": "python",
+        "paths": [
+          "ai-agent-backend/app/services/workflow_service.py",
+          "ai-agent-backend/app/services/agent_runner.py",
+          "ai-agent-backend/app/workflows/**/*.py"
+        ]
+      },
+      "guidelines": [
+        "Framework: LangGraph is the primary framework for multi-agent/workflow orchestration.",
+        "Concepts: Define workflows using `langgraph.graph.StateGraph`. Nodes are functions/callables (agents/tools). Edges define control flow. Manage state explicitly.",
+        "Implementation: Define graph structures in `WorkflowService`. Use Pydantic for state schemas. Node functions should be modular, often calling `AgentRunner` or `PluginService`.",
+        "State Management: Implement robust checkpointing/persistence for graph state (e.g., using Supabase/Prisma).",
+        "Reference: Adhere to patterns in existing code and official LangGraph documentation ([https://langchain-ai.github.io/langgraph/)."](https://langchain-ai.github.io/langgraph/).")
+      ]
+    },
+    {
+      "id": "backend_plugins_external",
+      "description": "Guidelines for interacting with external services: LLMs (LiteLLM), A2A, Memory, Plugins.",
+      "appliesTo": {
+        "language": "python",
+        "paths": [
+          "ai-agent-backend/app/services/plugin_service.py",
+          "ai-agent-backend/app/services/a2a_service.py",
+          "ai-agent-backend/app/services/llm_services.py",
+          "ai-agent-backend/app/services/memory_service.py"
+        ]
+      },
+      "guidelines": [
+        "Service Usage: Use dedicated services (LLMService via LiteLLM, A2AService, PluginService, MemoryService).",
+        "Security: Retrieve ALL required credentials via `KeyService` (Supabase Vault).",
+        "A2A: Implement both Client and Server logic within `A2AService` following the A2A specification (@file:path/to/A2A_spec.md if available). Use `httpx.AsyncClient` for client calls.",
+        "Plugins: `PluginService` executes tools based on stored configurations.",
+        "Error Handling: Implement robust handling for external calls (timeouts via `httpx`, connection errors, API errors, non-2xx responses). Log contextually."
+      ]
+    },
+    {
+      "id": "backend_pytest_tests",
+      "description": "Rules and patterns for writing effective Pytest unit and integration tests.",
+      "appliesTo": {
+        "language": "python",
+        "paths": ["ai-agent-backend/tests/**/*.py"]
+      },
+      "guidelines": [
+        "Framework: Use `pytest`.",
+        "Types: Write Unit tests (services, CRUD, utils) and Integration tests (API endpoints using `fastapi.TestClient` or `httpx`).",
+        "Structure: Arrange-Act-Assert.",
+        "Fixtures: Use `@pytest.fixture` for setup (e.g., test client, mock services, DB state). See @file:ai-agent-backend/tests/conftest.py.",
+        "Mocking: Use `pytest-mock` (`mocker`) extensively to isolate components. Mock: service dependencies, CRUD functions, `supabase-py` client calls **or Prisma Client methods (e.g., `mocker.patch('prisma.user.findUnique', ...)` )**, `httpx` requests, `KeyService` calls.",
+        "Coverage: Test success paths, expected error conditions (e.g., `pytest.raises(HTTPException)`), and edge cases. Aim for high coverage."
+      ]
+    },
+    // ========================================
+    // == Google ADK Agent Builder Integration ==
+    // ========================================
+    {
+      "id": "backend_google_adk_agent_builder",
+      "description": "Guidelines for integrating Google Agent Development Kit (ADK) as a modular agent builder in the backend.",
+      "appliesTo": {
+        "language": "python",
+        "paths": [
+          "ai-agent-backend/app/services/agent_builder_service.py",
+          "ai-agent-backend/app/services/agent_runner.py",
+          "ai-agent-backend/app/models/agent.py"
+        ]
+      },
+      "guidelines": [
+        "Architecture: Integrate Google ADK as a modular, pluggable agent builder within the backend.",
+        "Interface: Expose ADK agent creation and execution via a dedicated service/module (e.g., AdkAgentBuilderService).",
+        "Endpoints: Allow API endpoints to specify 'adk' as the agent builder type for agent creation and execution.",
+        "Interop: Ensure ADK agents can be invoked directly or as part of workflows (LangGraph nodes/tools).",
+        "Async: All ADK integration should follow async/await patterns and robust error handling.",
+        "Security: Retrieve all required credentials for ADK agents via KeyService (Supabase Vault).",
+        "Testing: Add unit and integration tests for ADK agent creation, execution, and orchestration."
+      ]
+    }
+  ]
+}

@@ -1,17 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from app.models.chat import ChatSessionCreate, ChatSessionOut, ChatMessageCreate, ChatMessageOut
+from typing import List
+
+from fastapi import APIRouter, Depends, Query, status
+
+from app.core.security import get_current_user_id
 from app.db.crud.crud_chat import (
     create_session,
-    list_sessions,
-    save_message,
     get_messages,
+    list_sessions,
 )
-from app.core.security import get_current_user_id
-from typing import List
+from app.models.chat import ChatMessageOut, ChatSessionCreate, ChatSessionOut
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
-@router.post("/sessions", response_model=ChatSessionOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/sessions",
+    response_model=ChatSessionOut,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_session_endpoint(
     session: ChatSessionCreate,
     user_id: str = Depends(get_current_user_id)

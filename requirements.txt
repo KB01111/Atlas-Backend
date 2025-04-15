@@ -1,5 +1,36 @@
-fastapi
-uvicorn
-openai
+fastapi>=0.100,<1.0
+uvicorn[standard]>=0.22,<1.0
+openai>=1.66.5
+openai-agents
 litellm
-pydantic
+pydantic>=2.0,<3.0
+sqlalchemy[asyncio]
+asyncpg
+loguru
+httpx
+supabase
+python-dotenv
+pydantic-settings
+pytest
+pytest-mock
+ruff
+langgraph==0.0.41
+# --- Additional dependencies for Atlas AgentVerse Backend ---
+# JWT Auth
+pyjwt
+# Graph utilities (if you meant Graphiti, use networkx for Python)
+networkx
+# For async testing
+pytest-asyncio
+# For type checking
+mypy
+# For code formatting/linting (already have ruff, but add black for compatibility)
+black
+# For real-time features (if using websockets)
+websockets
+# For advanced HTTP client/server
+httpx[http2]
+# For agent-to-agent (A2A) protocol (if needed, stub)
+# a2a (unofficial, stub if not on PyPI)
+# For any additional plugins (add as needed)
+# Add other packages here as you expand functionality
