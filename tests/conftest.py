@@ -1,23 +1,22 @@
 """Pytest configuration file for setting up fixtures."""
 
-from unittest.mock import AsyncMock, patch  # For mocking async functions
+# Standard library imports
+from unittest.mock import AsyncMock, MagicMock, patch
 
+# Third-party imports
 import pytest
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
-# Placeholder for Supabase client mock
-# from supabase_py_async import AsyncClient
-# Import the dependency to override and the service functions to mock
+# Local application imports
+from app.api.endpoints.keys import APIKeyMetaOut
 from app.core.security import get_current_user_id
-
-# Placeholder for the main FastAPI app instance
-# We'll need to import it from app.main or similar
-from app.main import app  # Assuming app is defined in app/main.py
-
-# from app.services import key_service # No longer mocking whole service
-from app.models.key import APIKeyMetaOut  # Import the output model
+from app.db.supabase_client import get_supabase_client
+from app.main import app
 
 TEST_USER_ID = "test-user-123"
+
+
+# --- Fixtures ---
 
 
 @pytest.fixture(scope="module")
@@ -29,24 +28,19 @@ def mock_auth():
     app.dependency_overrides = {}
 
 
-@pytest.fixture(scope="module")
-def test_client(mock_auth) -> TestClient: # Add mock_auth dependency
-    """Provide a FastAPI TestClient instance with auth override."""
-    client = TestClient(app)
-    return client
+@pytest.fixture(scope="function")
+async def client(mock_auth):
+    """Provide an async test client with auth override."""
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        yield ac
 
 
-@pytest.fixture
-def mock_store_api_key() -> AsyncMock:
-    """Mock the key_service.store_api_key function."""
-    with patch("app.api.endpoints.keys.store_api_key", new_callable=AsyncMock) as mock:
-        yield mock
-
+# Mock specific service functions used by endpoints
 @pytest.fixture
 def mock_list_api_keys() -> AsyncMock:
-    """Mock the key_service.list_api_keys function."""
+    """Mock the key_service.list_api_keys function (used in keys endpoint)."""
+    # Adjust the patch target to where list_api_keys is *used* by the endpoint
     with patch("app.api.endpoints.keys.list_api_keys", new_callable=AsyncMock) as mock:
-        # Example return value
         mock.return_value = [
             APIKeyMetaOut(
                 id="key1", service="openai", created_at="t1", last_used_at="t2"
@@ -57,21 +51,52 @@ def mock_list_api_keys() -> AsyncMock:
         ]
         yield mock
 
+
 @pytest.fixture
 def mock_delete_api_key() -> AsyncMock:
-    """Mock the key_service.delete_api_key function."""
+    """Mock the key_service.delete_api_key function (used in keys endpoint)."""
+    # Adjust the patch target to where delete_api_key is *used* by the endpoint
     with patch("app.api.endpoints.keys.delete_api_key", new_callable=AsyncMock) as mock:
+        mock.return_value = None  # delete usually returns None on success
         yield mock
 
 
-# @pytest.fixture
-# def mock_supabase_client() -> AsyncMock:
-#     """Provide a mock async Supabase client."""
-#     # mock_client = AsyncMock(spec=AsyncClient)
-#     # Configure mock responses as needed, e.g.:
-#     # mock_client.table.return_value.select.return_value.eq.return_value.execute.return_value = \
-#     #     MagicMock(data=[...])
-#     # return mock_client
-#     pass # Needs Supabase client import
+# Add mock for store_api_key if needed by any tests
+@pytest.fixture
+def mock_store_api_key() -> AsyncMock:
+    """Mock the key_service.store_api_key function (used in keys endpoint)."""
+    with patch("app.api.endpoints.keys.store_api_key", new_callable=AsyncMock) as mock:
+        # Example: Return a simple dict or a mock object representing the stored key
+        mock.return_value = {"id": "new-key-id", "key_meta": "mocked_meta"}
+        yield mock
 
-# Add other common fixtures here
+
+# If you need to mock the Supabase client itself (e.g., for direct service tests)
+@pytest.fixture(scope="function")
+def mock_supabase_client() -> AsyncMock:
+    """Provide a mock async Supabase client instance."""
+    mock_client = AsyncMock() # spec=SupabaseClient can be added if needed
+    # Example: Mock table().select()... chain
+    mock_table = AsyncMock()
+    mock_select_query = AsyncMock()
+    mock_execute = AsyncMock(
+        return_value=MagicMock(data=[]) # Example empty data
+    )
+
+    mock_client.table.return_value = mock_table
+    mock_table.select.return_value = mock_select_query
+    # Break the long line
+    (mock_select_query.eq.return_value
+     .order.return_value
+     .execute.return_value) = mock_execute
+    # Configure other methods as needed (insert, update, delete)
+
+    # Override the dependency
+    original_override = app.dependency_overrides.get(get_supabase_client)
+    app.dependency_overrides[get_supabase_client] = lambda: mock_client
+    yield mock_client
+    # Restore original override or remove
+    if original_override:
+        app.dependency_overrides[get_supabase_client] = original_override
+    else:
+        del app.dependency_overrides[get_supabase_client]

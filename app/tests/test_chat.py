@@ -39,8 +39,7 @@ from fastapi import status
 from httpx import AsyncClient
 
 from app.core.security import get_current_user_id
-from main import app
-
+from app.main import app  # Standardized import
 
 @pytest.mark.asyncio
 async def test_chat_session_and_messages(monkeypatch):

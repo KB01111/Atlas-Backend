@@ -22,6 +22,7 @@ pyjwt
 networkx
 # For async testing
 pytest-asyncio
+pytest-asyncio
 # For type checking
 mypy
 # For code formatting/linting (already have ruff, but add black for compatibility)
@@ -34,3 +35,4 @@ httpx[http2]
 # a2a (unofficial, stub if not on PyPI)
 # For any additional plugins (add as needed)
 # Add other packages here as you expand functionality
+# supabase_py_vault removed: not on PyPI
