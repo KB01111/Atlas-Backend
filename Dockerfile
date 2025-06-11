@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.4
 
 # ---- Build stage ----
-FROM python:3.10-slim AS builder
+FROM python:3.13.4-slim AS builder
 WORKDIR /app
 
 # System deps for building wheels, psycopg2, etc.
@@ -12,7 +12,7 @@ COPY requirements-dev.txt ./
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # ---- Production image ----
-FROM python:3.10-slim
+FROM python:3.13.4-slim
 
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
