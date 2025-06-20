@@ -36,3 +36,4 @@ httpx[http2]
 # For any additional plugins (add as needed)
 # Add other packages here as you expand functionality
 # supabase_py_vault removed: not on PyPI
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
