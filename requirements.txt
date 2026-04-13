@@ -14,7 +14,7 @@ pydantic-settings
 pytest
 pytest-mock
 ruff
-langgraph==0.0.41
+langgraph==1.0.10rc1
 # --- Additional dependencies for Atlas AgentVerse Backend ---
 # JWT Auth
 pyjwt
